@@ -33,7 +33,7 @@ class CustomerController extends Controller
         //dd($list);
         //dd($contents);
         //Storage::disk('public')->put('customers.json', json_encode($list, JSON_PRETTY_PRINT));
-        return response()->view("customers.list", ['list'=>$this->list]);
+        return response()->view("customers.list", ['list' => $this->list]);
     }
 
     /**
@@ -55,7 +55,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $info =
-            [   'name' => $request->name,
+            ['name' => $request->name,
                 'Position' => $request->Position,
                 'Office' => $request->Office,
                 'Age' => $request->Age,
@@ -65,7 +65,7 @@ class CustomerController extends Controller
 
         array_push($this->list, $info);
         Storage::disk('public')->put('customers.json', json_encode($this->list, JSON_PRETTY_PRINT));
-       // dd($this->list);
+        // dd($this->list);
         return redirect()->route("customers.list");
     }
 
@@ -77,7 +77,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -86,8 +86,10 @@ class CustomerController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
+        $data = $this->list[$id];
+        return response()->view("customers.edit", compact(['data', 'id']));
 
     }
 
@@ -100,7 +102,23 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $info =
+            ['name' => $request->name,
+                'Position' => $request->Position,
+                'Office' => $request->Office,
+                'Age' => $request->Age,
+                'Start date' => $request->input('Startdate'),
+                'Salary' => $request->Salary,
+            ];
+
+        foreach ($this->list as $key => $value) {
+            if ($key == $id) {
+                $this->list[$key] = $info;
+                break;
+            }
+        }
+        Storage::disk('public')->put('customers.json', json_encode($this->list, JSON_PRETTY_PRINT));
+        return redirect()->route("customers.list");
     }
 
     /**
@@ -111,8 +129,8 @@ class CustomerController extends Controller
      */
     public function destroy(int $id)
     {
-        foreach($this->list as $key => $val){
-            if ($key == $id){
+        foreach ($this->list as $key => $val) {
+            if ($key == $id) {
                 unset($this->list[$id]);
                 break;
             }

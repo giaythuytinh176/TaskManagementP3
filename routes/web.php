@@ -23,11 +23,12 @@ Route::prefix("customers")->group(function (){
 
     Route::get("add", [\App\Http\Controllers\CustomerController::class, 'add'])->name("customers.add");
 
-    Route::post("update", [\App\Http\Controllers\CustomerController::class, 'store'])->name("customers.store");
+    Route::post("store", [\App\Http\Controllers\CustomerController::class, 'store'])->name("customers.store");
 
     Route::get("delete/{id}", [\App\Http\Controllers\CustomerController::class, 'destroy'])->where('id', "[\d]+")->name("customers.delete");
     Route::get("edit/{id}", [\App\Http\Controllers\CustomerController::class, 'edit'])->where('id', '[\d]+')->name("customers.edit");
 
+    Route::post("update/{id}", [\App\Http\Controllers\CustomerController::class, 'update'])->where('id', '[\d]+')->name("customers.update");
 
 
 });
